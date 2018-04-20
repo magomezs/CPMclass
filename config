@@ -14,10 +14,8 @@ modelID = 1
 [models]
 
 [[1]]
-caffemodel_person = #put the directory where is saved in you pc
-deployFile_person = #put the directory where is saved in you pc
-caffemodel =  #put the directory where is saved in you pc
-deployFile =  #put the directory where is saved in you pc
+caffemodel =  #put the directory where the CPM caffe model is saved in you pc
+deployFile =  #put the directory where the CPM deploy file is saved in you pc
 description = 'MPII 6 stage'
 boxsize = 368
 np = 14
