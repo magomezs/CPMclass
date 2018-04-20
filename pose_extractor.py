@@ -13,10 +13,8 @@ import util
 import copy
 import math
 
-#sys.path.insert(0,'/home/magomezs/caffe-master' + '/python')
 
-
-class PoseExtractor(caffe.Layer):
+class PartsExtractor(caffe.Layer):
   def setup(self, bottom, top):
     if len(bottom) != 1:
        raise Exception('must have exactly one input')
@@ -29,23 +27,15 @@ class PoseExtractor(caffe.Layer):
         caffe.set_mode_gpu()
     else:
         caffe.set_mode_cpu()
-    caffe.set_device(self.param['GPUdeviceNumber']) # set to your device! 
-    self.pose_net = caffe.Net(self.model['deployFile'], self.model['caffemodel'], caffe.TEST) 
-    #pose_net.blobs['image'].reshape(*(1,3,128,64))
-    #person_net.reshape()
-    self.pose_net.forward() # dry run to avoid GPU synchronization later in caffe
-    self.factor=2
+    caffe.set_device(self.param['GPUdeviceNumber']) 
+    self.pose_net = caffe.Net(self.model['deployFile'], self.model['caffemodel'], caffe.TEST)  #architecture and learnt model file
+    self.pose_net.forward() 
+    self.factor=2						                               #factor to scale the input image
     self.batch=bottom[0].shape[0]
-     #print batch
     self.chanels=bottom[0].shape[1]
-     #print chanels
     self.height= bottom[0].shape[2]*self.factor
-     #print height 
     self.width= bottom[0].shape[3]*self.factor
-    #print "L"
 
-
- 
 
   def reshape(self,bottom,top):
        top[0].reshape(self.batch, 3, 45, 45)
@@ -57,18 +47,6 @@ class PoseExtractor(caffe.Layer):
        top[6].reshape(self.batch, 3, 60, 30)
        top[7].reshape(self.batch, 3, 60, 30)
        top[8].reshape(self.batch, 3, 60, 30)
-
-        # check input dimensions match
-        # if bottom[0].count != bottom[1].count:
-        #    raise Exception("Inputs must have the same dimension.")
-        # difference is shape of inputs
-       # self.diff = np.zeros(bottom[0].num, dtype=np.float32)
-       # self.dist_sq = np.zeros(bottom[0].num, dtype=np.float32)
-       # self.dist_norm = np.zeros(bottom[0].num, dtype=np.float32)
-       # self.zeros = np.zeros(bottom[0].num)
-       # self.ones =np.ones(bottom[0].num)
-        # loss output is scalar
-        #top[0].reshape(1)
 
    
   def forward(self, bottom, top):
