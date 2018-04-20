@@ -1,9 +1,9 @@
 # CPMclass
 
 This repository includes:
-1. A c++ class to interpret CPM caffe models and weights, obtaining person skeletons. This class is defined by the files cpm_c++.cpp and cpm_c++.h
+1. A c++ class to interpret CPM caffe deploy (.prototxt) and learnt model (.caffemodel) files, obtaining person skeletons. This class is defined by the files cpm_c++.cpp and cpm_c++.h
 
-2. A caffe python layer (parts_extractor.py) whose input is a person image blob and its outputs are nine body parts images blobs corresponging to: head, upper right arm, lower right arm, upper laeft arm, lower left arm, upper right leg, lower right leg, upper left leg, and lower left leg.
+2. A caffe python layer (parts_extractor.py) whose input is a person image blob and its outputs are nine body parts images blobs corresponging to: head, upper right arm, lower right arm, upper laeft arm, lower left arm, upper right leg, lower right leg, upper left leg, and lower left leg. The deploy and learnt model files must be given.
  
 <br />
 
