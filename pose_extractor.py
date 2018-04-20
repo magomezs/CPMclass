@@ -30,27 +30,27 @@ class PartsExtractor(caffe.Layer):
     caffe.set_device(self.param['GPUdeviceNumber']) 
     self.pose_net = caffe.Net(self.model['deployFile'], self.model['caffemodel'], caffe.TEST)  #architecture and learnt model file
     self.pose_net.forward() 
-    self.factor=2						                               #factor to scale the input image
+    self.factor=2					# factor to scale the input image
     self.batch=bottom[0].shape[0]
     self.chanels=bottom[0].shape[1]
-    self.height= bottom[0].shape[2]*self.factor
-    self.width= bottom[0].shape[3]*self.factor
+    self.height= bottom[0].shape[2]*self.factor		# input image height after scaling
+    self.width= bottom[0].shape[3]*self.factor		# input image width after scaling
 
 
   def reshape(self,bottom,top):
-       top[0].reshape(self.batch, 3, 45, 45)
-       top[1].reshape(self.batch, 3, 40, 30)
-       top[2].reshape(self.batch, 3, 40, 30)
-       top[3].reshape(self.batch, 3, 40, 30)
-       top[4].reshape(self.batch, 3, 40, 30)
-       top[5].reshape(self.batch, 3, 60, 30)
-       top[6].reshape(self.batch, 3, 60, 30)
-       top[7].reshape(self.batch, 3, 60, 30)
-       top[8].reshape(self.batch, 3, 60, 30)
+       top[0].reshape(self.batch, 3, 45, 45)		# head
+       top[1].reshape(self.batch, 3, 40, 30)		# upper right arm
+       top[2].reshape(self.batch, 3, 40, 30)		# lower right arm
+       top[3].reshape(self.batch, 3, 40, 30)		# upper left arm
+       top[4].reshape(self.batch, 3, 40, 30)		# lower left arm
+       top[5].reshape(self.batch, 3, 60, 30)		# upper right leg
+       top[6].reshape(self.batch, 3, 60, 30)		# lower right leg
+       top[7].reshape(self.batch, 3, 60, 30)		# upper left leg
+       top[8].reshape(self.batch, 3, 60, 30)		# lower left leg
 
    
   def forward(self, bottom, top):
-     
+     # loading input image 	
      input_image = np.zeros((128, 64, 3, self.batch))
      for p in range(self.batch):
 	    for x_p in range(64):
@@ -58,31 +58,22 @@ class PartsExtractor(caffe.Layer):
 		    if x_p >= 0 and x_p < 64 and y_p >= 0 and y_p < 128:
 		       input_image[y_p, x_p, :, p] = np.float32(bottom[0].data[p,:, y_p, x_p])/255
      
-     
+     # scaling input image
      input_image_resize=np.ones((128*2, 64*2, 3, self.batch))/2
      for p in range(self.batch):
        image = np.zeros((128, 64, 3))
        image=input_image[:,:,:,p].copy()
        input_image_resize[:,:,:,p] = cv.resize(image, (0,0), fx=2, fy=2, interpolation = cv.INTER_CUBIC)
-                
-
-
+     
+     # centering input image on a image with the format required by the CPM	
      person_image=np.ones((self.model['boxsize'], self.model['boxsize'], 3, self.batch))/2#person_image = np.ones((128, 64, 3, batch))/2#
      for p in range(self.batch):
 	    for x_i in range(self.width):
 		for y_i in range(self.height):
 		    x_p = self.model['boxsize']/2 - self.width/2 + x_i
 		    y_p = self.model['boxsize']/2 -self.height/2 + y_i
-		    #if x_p >= 0 and x_p < width and y_p >= 0 and y_p < height:
 		    person_image[y_p, x_p, :, p] = input_image_resize[y_i, x_i, :, p]#np.float32(bottom[0].data[p,:, y_p, x_p])/255
-                       
-
-     #cv.imshow( "gh", person_image[:,:,:,0])
-     #cv.waitKey()
-     #cv.imshow( "gh", person_image[:,:,:,7])
-     #cv.waitKey()
-     #cv.imshow( "gh", person_image[:,:,:,39])
-     #cv.waitKey()
+  
 
 
      gaussian_map = np.zeros((self.model['boxsize'], self.model['boxsize']))#gaussian_map = np.zeros((128, 64))#
