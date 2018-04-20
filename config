@@ -12,13 +12,12 @@ modelID = 1
 
 
 [models]
-## don't edit this part
 
 [[1]]
-caffemodel_person = '/home/maria/Desktop/THESIS_CODE/PROJECTS/MODELLING_HUMAN_SHAPE/CPM/model/_trained_person_MPI/pose_iter_70000.caffemodel'
-deployFile_person = '/home/maria/Desktop/THESIS_CODE/PROJECTS/MODELLING_HUMAN_SHAPE/CPM/model/_trained_person_MPI/pose_deploy_copy_4sg_resize.prototxt'
-caffemodel = '/home/maria/Desktop/THESIS_CODE/PROJECTS/MODELLING_HUMAN_SHAPE/CPM/model/_trained_MPI/pose_iter_320000.caffemodel'
-deployFile = '/home/maria/Desktop/THESIS_CODE/PROJECTS/MODELLING_HUMAN_SHAPE/CPM/model/_trained_MPI/pose_deploy_resize.prototxt'
+caffemodel_person = #put the directory where is saved in you pc
+deployFile_person = #put the directory where is saved in you pc
+caffemodel =  #put the directory where is saved in you pc
+deployFile =  #put the directory where is saved in you pc
 description = 'MPII 6 stage'
 boxsize = 368
 np = 14
